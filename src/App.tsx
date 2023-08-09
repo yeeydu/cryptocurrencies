@@ -4,9 +4,10 @@ import axios from "axios";
 import CryptoSummary from "./components/CryptoSummary";
 import { Crypto } from "./components/Types";
 
-function App(){
+function App() {
   //                               Crypto[] Crypto type and Array or null
   const [cryptos, setCryptos] = useState<Crypto[] | null>(null);
+  const [selected, setSelected] = useState<Crypto | null>();
 
   useEffect(() => {
     const url =
@@ -17,13 +18,29 @@ function App(){
   }, []);
 
   return (
-    <div className="App">
-      {cryptos ?
-         cryptos.map((crypto: Crypto) => {
-          return <CryptoSummary crypto={crypto} key={crypto.id}/>
-          })
-        : null }
-    </div>
+    <>
+      <div className="App">
+        <select
+          onChange={(e) => {
+            const c = cryptos?.find((x) => x.id === e.target.value);
+            setSelected(c);
+          }}
+          defaultValue="default"
+        >
+          <option>Choose option</option>
+          {cryptos
+            ? cryptos.map((crypto: Crypto) => {
+                return (
+                  <option key={crypto.id} value={crypto.id}>
+                    {crypto.name}
+                  </option>
+                );
+              })
+            : null}
+        </select>
+      </div>
+      {selected ? <CryptoSummary crypto={selected} /> : null}
+    </>
   );
 }
 
