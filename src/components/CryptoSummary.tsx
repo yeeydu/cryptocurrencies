@@ -9,7 +9,6 @@ export default function CryptoSummary({ crypto }: AppProps): JSX.Element {
   return (
     <div>
        <p key={crypto.id}>{crypto.name + " €" + crypto.current_price}</p>
-       
     </div>
   );
 }
