@@ -83,6 +83,7 @@ export default function CalculateValues() {
   return (
     <div className="container mt-4">
       <div className="row g-3">
+      <p>Select Crypto currency and amount to calculate its values, you can add more by selecting another one.</p>
         <div className="col">
           <select
             className="form-select"

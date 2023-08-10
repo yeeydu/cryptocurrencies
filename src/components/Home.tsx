@@ -111,6 +111,7 @@ function Home() {
   return (
     <div className="container mt-4">
       <div className="row g-3">
+      <p>Select Crypto currency and time range to view its market capitalization rank for a month, week and day.</p>
         <div className="col">
           <select
             className="form-select"
