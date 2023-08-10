@@ -11,43 +11,22 @@ import {
   Title,
   Tooltip,
   Legend,
+  ArcElement,
 } from "chart.js";
-import { Line } from "react-chartjs-2";
+import { Pie } from "react-chartjs-2";
 import moment from "moment";
 import CryptoSummaryCalc from "./CryptoSummaryCalc";
 
-ChartJS.register(
-  CategoryScale,
-  LinearScale,
-  PointElement,
-  LineElement,
-  Title,
-  Tooltip,
-  Legend
-);
+ChartJS.register(ArcElement, Tooltip, Legend);
 
 export default function CalculateValues() {
   //                               Crypto[] Crypto type and Array or null
   const [cryptos, setCryptos] = useState<Crypto[] | null>(null);
   const [selected, setSelected] = useState<Crypto[]>([]);
 
-  /*
-   // charts variables
-   const [data, setData] = useState<ChartData<"line">>();
-   const [options, setOptions] = useState<ChartOptions<"line">>({
-     responsive: true,
-     plugins: {
-       legend: {
-         // position: "top" as const,
-         display: false,
-       },
-       title: {
-         display: true,
-         text: "Chart.js Line Chart",
-       },
-     },
-   });
- */
+  // charts variables
+  const [data, setData] = useState<ChartData<"pie">>();
+
   // API GET ALl cryptos
   useEffect(() => {
     const url =
@@ -56,62 +35,40 @@ export default function CalculateValues() {
       setCryptos(response.data);
     });
   }, []);
-  /*
-   // API Get selected crypto and range // if range is 1 day set intervals in hours
-   useEffect(() => {
-     if(!selected) return; // avoid error at load because nothing is selected
-     axios
-       .get(
-         `https://api.coingecko.com/api/v3/coins/${selected?.id}/market_chart?vs_currency=eur&days=${range}&interval=daily` //${range === '1' ? 'interval=hourly':'interval=daily'} hourly interval only enterprise plan
-       )
-       .then((response) => {
-         setData({
-           // DATE values
-           labels: response.data.prices.map((price: number[]) => {
-             //divide value by 1000 because of miliseconds
-             return moment
-               .unix(price[0] / 1000)
-               .format(range === "1" ? "HH:MM" : "MM-DD");
-           }),
-           datasets: [
-             {
-               label: "Dataset 1",
-               data: response.data.prices.map((price: number[]) => {
-                 return price[1];
-               }),
-               borderColor: "rgb(255, 99, 132)",
-               backgroundColor: "rgba(255, 99, 132, 0.5)",
-             },
-             // {
-             //   label: 'Dataset 2',
-             //   data: labels.map(() => faker.datatype.number({ min: -1000, max: 1000 })),
-             //   borderColor: 'rgb(53, 162, 235)',
-             //   backgroundColor: 'rgba(53, 162, 235, 0.5)',
-             // },
-           ],
-         }); // set
-         setOptions({
-           responsive: true,
-           plugins: {
-             legend: {
-               //position: "top" as const,
-               display: false,
-             },
-             title: {
-               display: true,
-               text:
-                 `${selected?.name} Price over last ${range}` +
-                 (range === "1" ? " day" : " days."),
-             },
-           },
-         });
-       });
-   }, [selected, range]);
- */
+
+  // Pie data
+  useEffect(() => {
+    if (selected.length === 0) return;
+    setData({
+      labels: selected.map((s) => s.name),
+      datasets: [
+        {
+          label: "# of Votes",
+          data: selected.map((s) => s.owned * s.current_price),
+          backgroundColor: [
+            "rgba(255, 99, 132, 0.2)",
+            "rgba(54, 162, 235, 0.2)",
+            "rgba(255, 206, 86, 0.2)",
+            "rgba(75, 192, 192, 0.2)",
+            "rgba(153, 102, 255, 0.2)",
+            "rgba(255, 159, 64, 0.2)",
+          ],
+          borderColor: [
+            "rgba(255, 99, 132, 1)",
+            "rgba(54, 162, 235, 1)",
+            "rgba(255, 206, 86, 1)",
+            "rgba(75, 192, 192, 1)",
+            "rgba(153, 102, 255, 1)",
+            "rgba(255, 159, 64, 1)",
+          ],
+          borderWidth: 1,
+        },
+      ],
+    });
+  }, [selected]);
 
   //void if you know its not returning nothing
   function updateOwned(crypto: Crypto, amount: number): void {
-    console.log("updateOwned", crypto, amount);
     // copy selected as temporary
     let temp = [...selected];
     // verified selected crypto is the same as crypto.id
@@ -148,37 +105,39 @@ export default function CalculateValues() {
                 })
               : null}
           </select>
+
+          {selected.map((s) => {
+            return <CryptoSummaryCalc crypto={s} updateOwned={updateOwned} />;
+          })}
+
+          {selected
+            ? "Your portfolio´s value is: € " +
+              selected
+                .map((s) => {
+                  if (isNaN(s.owned)) {
+                    return 0;
+                  }
+                  return s.current_price * s.owned;
+                }) // reducer func to sum values
+                .reduce((prev, current) => {
+                  return prev + current;
+                }, 0)
+                .toLocaleString(undefined, {
+                  minimumFractionDigits: 2,
+                  maximumFractionDigits: 2,
+                })
+            : null}
         </div>
-
-        {selected.map((s) => {
-          return <CryptoSummaryCalc crypto={s} updateOwned={updateOwned} />;
-        })}
-
-        {/* {selected ? <CryptoSummaryCalc crypto={selected} /> : null} */}
-        {/*render a line chart*/}
-        {/* {data ? (
-         <div style={{ width: 600 }}>
-           <Line options={options} data={data} />
-         </div>
-       ) : null} */}
+        <div className="col">
+          {/* {selected ? <CryptoSummaryCalc crypto={selected} /> : null} */}
+          {/*render a line chart*/}
+          {data ? (
+            <div style={{ width: 600 }}>
+              <Pie data={data} />
+            </div>
+          ) : null}
+        </div>
       </div>
-      {selected
-        ? "Your portfolio´s value is worth: € " +
-          selected
-            .map((s) => {
-              if (isNaN(s.owned)) {
-                return 0;
-              }
-              return s.current_price * s.owned;
-            }) // reducer func to sum values
-            .reduce((prev, current) => {
-              return prev + current;
-            }, 0)
-            .toLocaleString(undefined, {
-              minimumFractionDigits: 2,
-              maximumFractionDigits: 2,
-            })
-        : null}
     </div>
   );
 }

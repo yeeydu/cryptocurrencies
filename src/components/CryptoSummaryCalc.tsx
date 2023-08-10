@@ -7,11 +7,7 @@ export type AppProps = {
 };
 //                                                         JSX.Element you´r returning a jsx element type
 export default function CryptoSummary({ crypto, updateOwned }: AppProps): JSX.Element {
-  const [amount, setAmount] = useState<number>(0);
-
-  useEffect(() => {
-    console.log(crypto.name, amount, crypto.current_price * (amount));
-  });
+  const [amount, setAmount] = useState<number>(NaN);
 
   return (
     <div className="container">
