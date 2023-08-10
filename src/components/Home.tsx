@@ -149,7 +149,7 @@ function Home() {
         {selected ? <CryptoSummary crypto={selected} /> : null}
         {/*render a line chart*/}
         {data ? (
-          <div style={{ width: 600 }}>
+          <div style={{ width: 800 }}>
             <Line options={options} data={data} />
           </div>
         ) : null}

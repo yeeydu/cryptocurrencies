@@ -83,10 +83,13 @@ export default function CalculateValues() {
   return (
     <div className="container mt-4">
       <div className="row g-3">
-      <p>Select Crypto currency and amount to calculate its values, you can add more by selecting another one.</p>
+        <p>
+          Select Crypto currency and amount to calculate its values, you can add
+          more by selecting another one.
+        </p>
         <div className="col">
           <select
-            className="form-select"
+            className="form-select mb-2"
             onChange={(e) => {
               const coin = cryptos?.find(
                 (x) => x.id === e.target.value
@@ -110,30 +113,33 @@ export default function CalculateValues() {
           {selected.map((s) => {
             return <CryptoSummaryCalc crypto={s} updateOwned={updateOwned} />;
           })}
-
-          {selected
-            ? "Your portfolio´s value is: € " +
-              selected
-                .map((s) => {
-                  if (isNaN(s.owned)) {
-                    return 0;
-                  }
-                  return s.current_price * s.owned;
-                }) // reducer func to sum values
-                .reduce((prev, current) => {
-                  return prev + current;
-                }, 0)
-                .toLocaleString(undefined, {
-                  minimumFractionDigits: 2,
-                  maximumFractionDigits: 2,
-                })
-            : null}
+          <div>
+            <strong>
+              {selected
+                ? "Your portfolio value is: € " +
+                  selected
+                    .map((s) => {
+                      if (isNaN(s.owned)) {
+                        return 0;
+                      }
+                      return s.current_price * s.owned;
+                    }) // reducer func to sum values
+                    .reduce((prev, current) => {
+                      return prev + current;
+                    }, 0)
+                    .toLocaleString(undefined, {
+                      minimumFractionDigits: 2,
+                      maximumFractionDigits: 2,
+                    })
+                : null}
+            </strong>
+          </div>
         </div>
         <div className="col">
           {/* {selected ? <CryptoSummaryCalc crypto={selected} /> : null} */}
           {/*render a line chart*/}
           {data ? (
-            <div style={{ width: 600 }}>
+            <div style={{ width: 500 }}>
               <Pie data={data} />
             </div>
           ) : null}
