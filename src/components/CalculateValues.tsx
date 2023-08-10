@@ -27,11 +27,11 @@ ChartJS.register(
 );
 
 export default function CalculateValues() {
-   //                               Crypto[] Crypto type and Array or null
-   const [cryptos, setCryptos] = useState<Crypto[] | null>(null);
-   const [selected, setSelected] = useState<Crypto[]>([]);
-   const [range, setRange] = useState<string>("30");
-   /*
+  //                               Crypto[] Crypto type and Array or null
+  const [cryptos, setCryptos] = useState<Crypto[] | null>(null);
+  const [selected, setSelected] = useState<Crypto[]>([]);
+  const [range, setRange] = useState<string>("30");
+  /*
    // charts variables
    const [data, setData] = useState<ChartData<"line">>();
    const [options, setOptions] = useState<ChartOptions<"line">>({
@@ -48,15 +48,15 @@ export default function CalculateValues() {
      },
    });
  */
-   // API GET ALl cryptos
-   useEffect(() => {
-     const url =
-       "https://api.coingecko.com/api/v3/coins/markets?vs_currency=eur&order=market_cap_desc&per_page=100&page=1&sparkline=false&locale=en";
-     axios.get(url).then((response) => {
-       setCryptos(response.data);
-     });
-   }, []);
- /*
+  // API GET ALl cryptos
+  useEffect(() => {
+    const url =
+      "https://api.coingecko.com/api/v3/coins/markets?vs_currency=eur&order=market_cap_desc&per_page=100&page=1&sparkline=false&locale=en";
+    axios.get(url).then((response) => {
+      setCryptos(response.data);
+    });
+  }, []);
+  /*
    // API Get selected crypto and range // if range is 1 day set intervals in hours
    useEffect(() => {
      if(!selected) return; // avoid error at load because nothing is selected
@@ -108,42 +108,45 @@ export default function CalculateValues() {
        });
    }, [selected, range]);
  */
-   return (
-     <>
-       <div className="container">
-         <select
-           onChange={(e) => {
-             const coin = cryptos?.find((x) => x.id === e.target.value) as Crypto;
-             setSelected([...selected, coin]);
-           }}
-           defaultValue="default"
-         >
-           <option>Choose option</option>
-           {cryptos
-             ? cryptos.map((crypto: Crypto) => {
-                 return (
-                   <option key={crypto.id} value={crypto.id}>
-                     {crypto.name}
-                   </option>
-                 );
-               })
-             : null}
-         </select>
-               
-       </div>
+  return (
+    <div className="container mt-4">
+      <div className="row g-3">
+        <div className="col">
+          <select
+            className="form-select"
+            onChange={(e) => {
+              const coin = cryptos?.find(
+                (x) => x.id === e.target.value
+              ) as Crypto;
+              setSelected([...selected, coin]);
+            }}
+            defaultValue="default"
+          >
+            <option>Choose option</option>
+            {cryptos
+              ? cryptos.map((crypto: Crypto) => {
+                  return (
+                    <option key={crypto.id} value={crypto.id}>
+                      {crypto.name}
+                    </option>
+                  );
+                })
+              : null}
+          </select>
+        </div>
 
-       {selected.map((s)=>{
-        return <CryptoSummaryCalc crypto={s}/>
-       })}
-       
-       {/* {selected ? <CryptoSummaryCalc crypto={selected} /> : null} */}
-       {/*render a line chart*/}
-       {/* {data ? (
+        {selected.map((s) => {
+          return <CryptoSummaryCalc crypto={s} />;
+        })}
+
+        {/* {selected ? <CryptoSummaryCalc crypto={selected} /> : null} */}
+        {/*render a line chart*/}
+        {/* {data ? (
          <div style={{ width: 600 }}>
            <Line options={options} data={data} />
          </div>
        ) : null} */}
-     </>
-   );
- }
- 
+      </div>
+    </div>
+  );
+}

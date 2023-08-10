@@ -59,7 +59,7 @@ function Home() {
 
   // API Get selected crypto and range // if range is 1 day set intervals in hours
   useEffect(() => {
-    if(!selected) return; // avoid error at load because nothing is selected
+    if (!selected) return; // avoid error at load because nothing is selected
     axios
       .get(
         `https://api.coingecko.com/api/v3/coins/${selected?.id}/market_chart?vs_currency=eur&days=${range}&interval=daily` //${range === '1' ? 'interval=hourly':'interval=daily'} hourly interval only enterprise plan
@@ -109,45 +109,51 @@ function Home() {
   }, [selected, range]);
 
   return (
-    <>
-      <div className="container">
-        <select
-          onChange={(e) => {
-            const coin = cryptos?.find((x) => x.id === e.target.value);
-            setSelected(coin);
-          }}
-          defaultValue="default"
-        >
-          <option>Choose option</option>
-          {cryptos
-            ? cryptos.map((crypto: Crypto) => {
-                return (
-                  <option key={crypto.id} value={crypto.id}>
-                    {crypto.name}
-                  </option>
-                );
-              })
-            : null}
-        </select>
-        <select
-          onChange={(e) => {
-            setRange(e.target.value);
-            //parseInt(setRange(e.target.value)); if days where numbers
-          }}
-        >
-          <option value="30">30 days</option>
-          <option value="7">7 days</option>
-          <option value="1">1 day</option>
-        </select>
-      </div>
-      {selected ? <CryptoSummary crypto={selected} /> : null}
-      {/*render a line chart*/}
-      {data ? (
-        <div style={{ width: 600 }}>
-          <Line options={options} data={data} />
+    <div className="container mt-4">
+      <div className="row g-3">
+        <div className="col">
+          <select
+            className="form-select"
+            onChange={(e) => {
+              const coin = cryptos?.find((x) => x.id === e.target.value);
+              setSelected(coin);
+            }}
+            defaultValue="default"
+          >
+            <option>Choose option</option>
+            {cryptos
+              ? cryptos.map((crypto: Crypto) => {
+                  return (
+                    <option key={crypto.id} value={crypto.id}>
+                      {crypto.name}
+                    </option>
+                  );
+                })
+              : null}
+          </select>
         </div>
-      ) : null}
-    </>
+        <div className="col">
+          <select
+            className="form-select"
+            onChange={(e) => {
+              setRange(e.target.value);
+              //parseInt(setRange(e.target.value)); if days where numbers
+            }}
+          >
+            <option value="30">30 days</option>
+            <option value="7">7 days</option>
+            <option value="1">1 day</option>
+          </select>
+        </div>
+        {selected ? <CryptoSummary crypto={selected} /> : null}
+        {/*render a line chart*/}
+        {data ? (
+          <div style={{ width: 600 }}>
+            <Line options={options} data={data} />
+          </div>
+        ) : null}
+      </div>
+    </div>
   );
 }
 

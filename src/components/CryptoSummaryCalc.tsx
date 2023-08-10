@@ -17,7 +17,7 @@ export default function CryptoSummary({ crypto }: AppProps): JSX.Element {
       <p key={crypto.id}>{crypto.name + " €" + crypto.current_price}</p>
       <input
         type="number"
-        className=" m-2 p-1"
+        className="form-control m-2 p-1"
         value={amount}
         onChange={(e) => {
           setAmount(e.target.value);
@@ -27,7 +27,7 @@ export default function CryptoSummary({ crypto }: AppProps): JSX.Element {
         {"€ " +
           (crypto.current_price * parseFloat(amount))
             .toFixed(2)
-            .replace(/\d(?=(\d{3})+\.)/g, '$&,')}
+            .replace(/\d(?=(\d{3})+\.)/g, "$&,")}
       </p>
     </div>
   );
