@@ -46,8 +46,19 @@ You can learn more in the [Create React App documentation](https://facebook.gith
 To learn React, check out the [React documentation](https://reactjs.org/).
 
 ------
+#### Description:
+Simple crypto currency information project. Followed Caleb Curry´s tutorial: https://www.youtube.com/watch?v=x_x5LkW6IXs&t=18s
+
+This project uses:
+
 # Chartjs
-https://react-chartjs-2.js.org/
+ - https://react-chartjs-2.js.org/
 
 # moment
-npm install moment --save
+ - npm install moment --save
+
+# Bootstrap
+ - npm install react-bootstrap bootstrap
+
+# Router Dom
+- npm i -D react-router-dom 
