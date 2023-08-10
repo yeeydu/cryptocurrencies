@@ -30,7 +30,7 @@ export default function CalculateValues() {
   //                               Crypto[] Crypto type and Array or null
   const [cryptos, setCryptos] = useState<Crypto[] | null>(null);
   const [selected, setSelected] = useState<Crypto[]>([]);
-  const [range, setRange] = useState<string>("30");
+
   /*
    // charts variables
    const [data, setData] = useState<ChartData<"line">>();
@@ -108,6 +108,21 @@ export default function CalculateValues() {
        });
    }, [selected, range]);
  */
+
+  //void if you know its not returning nothing
+  function updateOwned(crypto: Crypto, amount: number): void {
+    console.log("updateOwned", crypto, amount);
+    // copy selected as temporary
+    let temp = [...selected];
+    // verified selected crypto is the same as crypto.id
+    let tempObj = temp.find((c) => c.id === crypto.id);
+    // pass the amunt select to the temp object
+    if (tempObj) {
+      tempObj.owned = amount;
+      setSelected(temp);
+    }
+  }
+
   return (
     <div className="container mt-4">
       <div className="row g-3">
@@ -136,7 +151,7 @@ export default function CalculateValues() {
         </div>
 
         {selected.map((s) => {
-          return <CryptoSummaryCalc crypto={s} />;
+          return <CryptoSummaryCalc crypto={s} updateOwned={updateOwned} />;
         })}
 
         {/* {selected ? <CryptoSummaryCalc crypto={selected} /> : null} */}
@@ -147,6 +162,23 @@ export default function CalculateValues() {
          </div>
        ) : null} */}
       </div>
+      {selected
+        ? "Your portfolio´s value is worth: € " +
+          selected
+            .map((s) => {
+              if (isNaN(s.owned)) {
+                return 0;
+              }
+              return s.current_price * s.owned;
+            }) // reducer func to sum values
+            .reduce((prev, current) => {
+              return prev + current;
+            }, 0)
+            .toLocaleString(undefined, {
+              minimumFractionDigits: 2,
+              maximumFractionDigits: 2,
+            })
+        : null}
     </div>
   );
 }
