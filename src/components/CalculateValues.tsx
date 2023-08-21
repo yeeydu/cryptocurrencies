@@ -80,6 +80,14 @@ export default function CalculateValues() {
     }
   }
 
+  const delete_coin = (crypto: Crypto)=> {
+    let coin = [...selected];
+    let tempObj = coin.find((c) => c.id === crypto.id);
+    setSelected((coin) =>
+      coin.filter((tempObj: { id: any }) => tempObj.id !== tempObj.id)
+    );
+  }
+
   return (
     <div className="container mt-4">
       <div className="row g-3">
@@ -111,7 +119,13 @@ export default function CalculateValues() {
           </select>
 
           {selected.map((s) => {
-            return <CryptoSummaryCalc crypto={s} updateOwned={updateOwned} />;
+            return (
+              <CryptoSummaryCalc
+                crypto={s}
+                updateOwned={updateOwned}
+                delete_coin={delete_coin}
+              />
+            );
           })}
           <div>
             <strong>
@@ -133,6 +147,14 @@ export default function CalculateValues() {
                     })
                 : null}
             </strong>
+            {/* <div className=" m-1">
+              <button
+                className="btn btn-secondary btn-sm mb-1"
+                onClick={()=> delete_coin}
+              >
+                Clear values
+              </button> 
+            </div> */}
           </div>
         </div>
         <div className="col">
