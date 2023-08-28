@@ -48,6 +48,8 @@ To learn React, check out the [React documentation](https://reactjs.org/).
 ------
 #### Description:
 Simple crypto currency information project. Followed Caleb Curry´s tutorial: https://www.youtube.com/watch?v=x_x5LkW6IXs&t=18s
+This project uses a free API access só it has a limited request per minutes, its only for test purpose. if you want to see how it works and get blocked, just wait for a few minutes and you will have access to the API again...
+
 
 This project uses:
 

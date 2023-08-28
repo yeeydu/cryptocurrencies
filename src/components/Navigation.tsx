@@ -7,7 +7,7 @@ function Navigation() {
     <>
       <Navbar bg="light" data-bs-theme="light">
         <Container>
-          <Navbar.Brand href="/">Crypto Currencies</Navbar.Brand>
+          <Navbar.Brand href="/"> <img width={28} src="./logo.png"/> Crypto Currencies</Navbar.Brand>
           <Nav className="me-auto">
             <Nav.Link href="/">Home</Nav.Link>
             <Nav.Link href="/calculate">Calculate</Nav.Link>
