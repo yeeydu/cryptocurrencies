@@ -16,6 +16,7 @@ import {
 } from "chart.js";
 import { Line } from "react-chartjs-2";
 import moment from "moment";
+import ApiMessage from "./ApiMessage";
 
 ChartJS.register(
   CategoryScale,
@@ -52,9 +53,15 @@ function Home() {
   useEffect(() => {
     const url =
       "https://api.coingecko.com/api/v3/coins/markets?vs_currency=eur&order=market_cap_desc&per_page=100&page=1&sparkline=false&locale=en";
-    axios.get(url).then((response) => {
-      setCryptos(response.data);
-    });
+    axios
+      .get(url)
+      .then((response) => {
+        setCryptos(response.data);
+      })
+      .catch(error => {
+        //console.log("status: " + error.response);
+        //console.log(error.message); 
+      });
   }, []);
 
   // API Get selected crypto and range // if range is 1 day set intervals in hours
@@ -110,8 +117,12 @@ function Home() {
 
   return (
     <div className="container mt-4">
+      <ApiMessage />
       <div className="row g-3">
-      <p>Select Crypto currency and time range to view its market capitalization rank for a month, week and day.</p>
+        <p>
+          Select Crypto currency and time range to view its market
+          capitalization rank for a month, week and day.
+        </p>
         <div className="col">
           <select
             className="form-select"

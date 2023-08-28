@@ -16,6 +16,7 @@ import {
 import { Pie } from "react-chartjs-2";
 import moment from "moment";
 import CryptoSummaryCalc from "./CryptoSummaryCalc";
+import ApiMessage from "./ApiMessage";
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
@@ -31,9 +32,14 @@ export default function CalculateValues() {
   useEffect(() => {
     const url =
       "https://api.coingecko.com/api/v3/coins/markets?vs_currency=eur&order=market_cap_desc&per_page=100&page=1&sparkline=false&locale=en";
-    axios.get(url).then((response) => {
-      setCryptos(response.data);
-    });
+    axios
+      .get(url)
+      .then((response) => {
+        setCryptos(response.data);
+      })
+      .catch((error) => {
+        //console.log("status " + error.message);
+      });
   }, []);
 
   // Pie data
@@ -80,16 +86,17 @@ export default function CalculateValues() {
     }
   }
 
-  const delete_coin = (crypto: Crypto)=> {
+  const delete_coin = (crypto: Crypto) => {
     let coin = [...selected];
     let tempObj = coin.find((c) => c.id === crypto.id);
     setSelected((coin) =>
       coin.filter((tempObj: { id: any }) => tempObj.id !== tempObj.id)
     );
-  }
+  };
 
   return (
     <div className="container mt-4">
+      <ApiMessage />
       <div className="row g-3">
         <p>
           Select Crypto currency and amount to calculate its values, you can add
